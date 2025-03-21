@@ -86,18 +86,22 @@ function App() {
         switch (level) {
           case 1: percentageOfIncome = 43.13; break;
           case 2: percentageOfIncome = 49.51; break;
-          // Para nivel 3+ solo se especifica para 1 hijo en la tabla
-          case 3: case 4: case 5: case 6: 
-            percentageOfIncome = 52.18; break; // Usando el valor más cercano disponible
+          // Para nivel 3+ usamos los valores específicos de cada nivel para 1 hijo
+          case 3: percentageOfIncome = 40.83; break; // Valor del nivel 3 para 1 hijo mayor de 3 años
+          case 4: percentageOfIncome = 42.21; break; // Valor del nivel 4 para 1 hijo mayor de 3 años
+          case 5: percentageOfIncome = 43.64; break; // Valor del nivel 5 para 1 hijo mayor de 3 años
+          case 6: percentageOfIncome = 45.12; break; // Valor del nivel 6 para 1 hijo mayor de 3 años
           default: percentageOfIncome = 43.13; // valor por defecto
         }
       } else { // Todos los hijos menores de 3 años
         switch (level) {
           case 1: percentageOfIncome = 39.71; break;
           case 2: percentageOfIncome = 47.45; break;
-          // Para nivel 3+ solo se especifica para 1 hijo en la tabla
-          case 3: case 4: case 5: case 6: 
-            percentageOfIncome = 49.51; break; // Usando el valor más cercano disponible
+          // Para nivel 3+ usamos los valores específicos de cada nivel para 1 hijo
+          case 3: percentageOfIncome = 38.49; break; // Valor del nivel 3 para 1 hijo menor de 3 años
+          case 4: percentageOfIncome = 39.79; break; // Valor del nivel 4 para 1 hijo menor de 3 años
+          case 5: percentageOfIncome = 41.14; break; // Valor del nivel 5 para 1 hijo menor de 3 años
+          case 6: percentageOfIncome = 42.53; break; // Valor del nivel 6 para 1 hijo menor de 3 años
           default: percentageOfIncome = 39.71; // valor por defecto
         }
       }
@@ -108,17 +112,23 @@ function App() {
       if (hasOver3) { // Al menos un hijo de 3 años o más
         switch (level) {
           case 1: percentageOfIncome = 54.23; break;
-          // Para otros niveles no hay datos específicos en la tabla
-          case 2: case 3: case 4: case 5: case 6:
-            percentageOfIncome = 56.00; break; // Estimación basada en la tendencia
+          // Para otros niveles usamos los valores específicos de cada nivel para 1 hijo
+          case 2: percentageOfIncome = 49.51; break; // Valor del nivel 2 para 1 hijo mayor de 3 años
+          case 3: percentageOfIncome = 40.83; break; // Valor del nivel 3 para 1 hijo mayor de 3 años
+          case 4: percentageOfIncome = 42.21; break; // Valor del nivel 4 para 1 hijo mayor de 3 años
+          case 5: percentageOfIncome = 43.64; break; // Valor del nivel 5 para 1 hijo mayor de 3 años
+          case 6: percentageOfIncome = 45.12; break; // Valor del nivel 6 para 1 hijo mayor de 3 años
           default: percentageOfIncome = 54.23; // valor por defecto
         }
       } else { // Todos los hijos menores de 3 años
         switch (level) {
           case 1: percentageOfIncome = 52.18; break;
-          // Para otros niveles no hay datos específicos en la tabla
-          case 2: case 3: case 4: case 5: case 6:
-            percentageOfIncome = 54.23; break; // Usando el valor más cercano disponible
+          // Para otros niveles usamos los valores específicos de cada nivel para 1 hijo
+          case 2: percentageOfIncome = 47.45; break; // Valor del nivel 2 para 1 hijo menor de 3 años
+          case 3: percentageOfIncome = 38.49; break; // Valor del nivel 3 para 1 hijo menor de 3 años
+          case 4: percentageOfIncome = 39.79; break; // Valor del nivel 4 para 1 hijo menor de 3 años
+          case 5: percentageOfIncome = 41.14; break; // Valor del nivel 5 para 1 hijo menor de 3 años
+          case 6: percentageOfIncome = 42.53; break; // Valor del nivel 6 para 1 hijo menor de 3 años
           default: percentageOfIncome = 52.18; // valor por defecto
         }
       }
