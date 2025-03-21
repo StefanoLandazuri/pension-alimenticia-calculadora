@@ -1,0 +1,9 @@
+
+@font-face {
+    font-family: 'Centrale Sans';
+    src: url('./assets/fonts/CentraleSans-Medium.woff2') format('woff2'),
+         url('./assets/fonts/CentraleSans-Medium.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+  }
