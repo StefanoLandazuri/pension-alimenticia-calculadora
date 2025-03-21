@@ -113,7 +113,7 @@ function App() {
         switch (level) {
           case 1: percentageOfIncome = 54.23; break;
           // Para otros niveles usamos los valores específicos de cada nivel para 1 hijo
-          case 2: percentageOfIncome = 49.51; break; // Valor del nivel 2 para 1 hijo mayor de 3 años
+          case 2: percentageOfIncome = 49.51; break; // Valor del nivel 2 para 1 hijo mayor de 3 años valor max
           case 3: percentageOfIncome = 40.83; break; // Valor del nivel 3 para 1 hijo mayor de 3 años
           case 4: percentageOfIncome = 42.21; break; // Valor del nivel 4 para 1 hijo mayor de 3 años
           case 5: percentageOfIncome = 43.64; break; // Valor del nivel 5 para 1 hijo mayor de 3 años
