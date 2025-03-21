@@ -51,6 +51,10 @@ function App() {
     // Calcular el porcentaje según el nivel, edad y número de hijos
     let percentageOfIncome = 0;
     
+    // Considerar Art. 14: En caso de tener hijos de diferentes edades, 
+    // se aplicará el porcentaje correspondiente al derechohabiente de mayor edad.
+    const hasOver3 = over3Count > 0;
+    
     // Porcentajes para 1 hijo
     if (totalChildren === 1) {
       if (under3Count === 1) { // 0 a 2 años
@@ -77,16 +81,8 @@ function App() {
     }
     // Porcentajes para 2 hijos
     else if (totalChildren === 2) {
-      if (under3Count > 0) { // Al menos un hijo de 0 a 2 años
-        switch (level) {
-          case 1: percentageOfIncome = 39.71; break;
-          case 2: percentageOfIncome = 47.45; break;
-          // Para nivel 3+ solo se especifica para 1 hijo en la tabla
-          case 3: case 4: case 5: case 6: 
-            percentageOfIncome = 49.51; break; // Usando el valor más cercano disponible
-          default: percentageOfIncome = 39.71; // valor por defecto
-        }
-      } else { // Todos los hijos de 3 años en adelante
+      // Según Art. 14, si hay hijos mayores de 3 años, aplicamos ese porcentaje
+      if (hasOver3) { // Al menos un hijo de 3 años o más
         switch (level) {
           case 1: percentageOfIncome = 43.13; break;
           case 2: percentageOfIncome = 49.51; break;
@@ -95,25 +91,35 @@ function App() {
             percentageOfIncome = 52.18; break; // Usando el valor más cercano disponible
           default: percentageOfIncome = 43.13; // valor por defecto
         }
+      } else { // Todos los hijos menores de 3 años
+        switch (level) {
+          case 1: percentageOfIncome = 39.71; break;
+          case 2: percentageOfIncome = 47.45; break;
+          // Para nivel 3+ solo se especifica para 1 hijo en la tabla
+          case 3: case 4: case 5: case 6: 
+            percentageOfIncome = 49.51; break; // Usando el valor más cercano disponible
+          default: percentageOfIncome = 39.71; // valor por defecto
+        }
       }
     }
     // Porcentajes para 3 o más hijos
     else if (totalChildren >= 3) {
-      if (under3Count > 0) { // Al menos un hijo de 0 a 2 años
-        switch (level) {
-          case 1: percentageOfIncome = 52.18; break;
-          // Para otros niveles no hay datos específicos en la tabla
-          case 2: case 3: case 4: case 5: case 6:
-            percentageOfIncome = 54.23; break; // Usando el valor más cercano disponible
-          default: percentageOfIncome = 52.18; // valor por defecto
-        }
-      } else { // Todos los hijos de 3 años en adelante
+      // Según Art. 14, si hay hijos mayores de 3 años, aplicamos ese porcentaje
+      if (hasOver3) { // Al menos un hijo de 3 años o más
         switch (level) {
           case 1: percentageOfIncome = 54.23; break;
           // Para otros niveles no hay datos específicos en la tabla
           case 2: case 3: case 4: case 5: case 6:
             percentageOfIncome = 56.00; break; // Estimación basada en la tendencia
           default: percentageOfIncome = 54.23; // valor por defecto
+        }
+      } else { // Todos los hijos menores de 3 años
+        switch (level) {
+          case 1: percentageOfIncome = 52.18; break;
+          // Para otros niveles no hay datos específicos en la tabla
+          case 2: case 3: case 4: case 5: case 6:
+            percentageOfIncome = 54.23; break; // Usando el valor más cercano disponible
+          default: percentageOfIncome = 52.18; // valor por defecto
         }
       }
     }
@@ -175,7 +181,10 @@ function App() {
       level: level,
       percentageOfIncome: percentageOfIncome.toFixed(2),
       SBU: SBU.toFixed(2),
-      incomeSBU: incomeSBU.toFixed(2)
+      incomeSBU: incomeSBU.toFixed(2),
+      hasChildrenUnder3: under3Count > 0,
+      hasChildrenOver3: over3Count > 0,
+      appliedArt14: (under3Count > 0 && over3Count > 0) ? "Sí" : "No"
     });
     
     // Mostrar el diálogo con resultados
@@ -290,6 +299,9 @@ function App() {
                   <p><strong>Pensión alimenticia total:</strong> ${result.totalAmount}</p>
                   <p><strong>Monto por hijo:</strong> ${result.perChildAmount}</p>
                   <p><strong>Número de hijos:</strong> {result.totalChildren}</p>
+                  {result.hasChildrenUnder3 && result.hasChildrenOver3 && (
+                    <p><strong>Art. 14 aplicado:</strong> {result.appliedArt14} (Se aplicó el porcentaje del hijo de mayor edad)</p>
+                  )}
                 </div>
                 <p className="result-note">
                   Cálculo basado en la tabla de pensiones alimenticias mínimas 2025 con un SBU de ${result.SBU}.
