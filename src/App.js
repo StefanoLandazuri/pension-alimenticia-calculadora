@@ -1,39 +1,65 @@
 import React, { useState } from 'react';
 import './App.css';
 import logo from './assets/logo.png';
+import WhatsAppButton from './components/WhatsAppButton';
 
 function App() {
   // State for form inputs
   const [monthlyIncome, setMonthlyIncome] = useState('');
+  const [isUnemployed, setIsUnemployed] = useState(false);
   const [childrenOver3, setChildrenOver3] = useState('');
   const [childrenUnder3, setChildrenUnder3] = useState('');
+  const [hasChildrenOver3, setHasChildrenOver3] = useState(false);
   const [hasChildrenUnder3, setHasChildrenUnder3] = useState(false);
+  const [hasDisability, setHasDisability] = useState(false);
   const [disabilityPercentage, setDisabilityPercentage] = useState('');
+  const [insuranceType, setInsuranceType] = useState('public'); // Predeterminado a funcionario público
   const [result, setResult] = useState(null);
   const [showDialog, setShowDialog] = useState(false);
 
   // Handle calculation
   const calculateSupport = (e) => {
     e.preventDefault();
-    
+
     // Variables
     const SBU = 470; // Salario Básico Unificado de Ecuador 2025
-    const income = parseFloat(monthlyIncome) || 0;
-    const over3Count = parseInt(childrenOver3) || 0;
+    const grossIncome = isUnemployed ? SBU : (parseFloat(monthlyIncome) || 0);
+    const over3Count = hasChildrenOver3 ? (parseInt(childrenOver3) || 0) : 0;
     const under3Count = hasChildrenUnder3 ? (parseInt(childrenUnder3) || 0) : 0;
     const totalChildren = over3Count + under3Count;
-    const disabilityLevel = disabilityPercentage;
-    
+    const disabilityLevel = hasDisability ? disabilityPercentage : "";
+
     // No podemos calcular sin hijos
     if (totalChildren === 0) {
       alert("Por favor, ingrese al menos un hijo para realizar el cálculo.");
       return;
     }
-    
+
+    // Aplicar descuento del seguro según el tipo seleccionado
+    let insurancePercentage = 0;
+    switch (insuranceType) {
+      case 'private':
+        insurancePercentage = 9.45;
+        break;
+      case 'public':
+      case 'police':
+        insurancePercentage = 11.45;
+        break;
+      case 'military':
+        insurancePercentage = 13.50;
+        break;
+      default:
+        insurancePercentage = 9.45; // Valor por defecto
+    }
+
+    // Calcular el ingreso neto después del descuento del seguro
+    const insuranceDiscount = grossIncome * (insurancePercentage / 100);
+    const netIncome = grossIncome - insuranceDiscount;
+
     // Determinar el nivel según los ingresos en términos de SBU
     let level = 0;
-    const incomeSBU = income / SBU;
-    
+    const incomeSBU = netIncome / SBU;
+
     if (incomeSBU <= 1.25000) {
       level = 1;
     } else if (incomeSBU <= 3.00000) {
@@ -47,14 +73,14 @@ function App() {
     } else {
       level = 6;
     }
-    
+
     // Calcular el porcentaje según el nivel, edad y número de hijos
     let percentageOfIncome = 0;
-    
+
     // Considerar Art. 14: En caso de tener hijos de diferentes edades, 
     // se aplicará el porcentaje correspondiente al derechohabiente de mayor edad.
     const hasOver3 = over3Count > 0;
-    
+
     // Porcentajes para 1 hijo
     if (totalChildren === 1) {
       if (under3Count === 1) { // 0 a 2 años
@@ -133,7 +159,7 @@ function App() {
         }
       }
     }
-    
+
     // Adicional por discapacidad (si aplica)
     let disabilitySupport = 0;
     if (disabilityLevel) {
@@ -167,22 +193,26 @@ function App() {
         }
       }
     }
-    
-    // Calcular el monto de la pensión alimenticia
-    const supportAmount = (income * (percentageOfIncome / 100)).toFixed(2);
-    
+
+    // Calcular el monto de la pensión alimenticia (se basa en el ingreso neto)
+    const supportAmount = (netIncome * (percentageOfIncome / 100)).toFixed(2);
+
     // Calcular el monto adicional por discapacidad (en términos de SBU)
     const disabilityAmount = (disabilitySupport * SBU / 100).toFixed(2);
-    
+
     // Calcular el monto total
     const totalAmount = (parseFloat(supportAmount) + parseFloat(disabilityAmount)).toFixed(2);
-    
+
     // Calcular monto por hijo
     const perChildAmount = (totalAmount / totalChildren).toFixed(2);
-    
+
     // Establecer el resultado
     setResult({
-      income: income.toFixed(2),
+      grossIncome: grossIncome.toFixed(2),
+      insuranceType: insuranceType,
+      insurancePercentage: insurancePercentage.toFixed(2),
+      insuranceDiscount: insuranceDiscount.toFixed(2),
+      netIncome: netIncome.toFixed(2),
       totalAmount: totalAmount,
       supportAmount: supportAmount,
       disabilityAmount: disabilityAmount,
@@ -196,10 +226,12 @@ function App() {
       hasChildrenOver3: over3Count > 0,
       appliedArt14: (under3Count > 0 && over3Count > 0) ? "Sí" : "No"
     });
-    
+
     // Mostrar el diálogo con resultados
     setShowDialog(true);
   };
+
+
 
   return (
     <div className="app">
@@ -208,37 +240,83 @@ function App() {
           <img src={logo} alt="Charry Sáenz Jácome & Galarza Estudio Jurídico" className="logo" />
         </div>
       </header>
-      
+
       <main className="calculator-container">
         <h1>Calculadora de Pensiones Alimenticias</h1>
         <p className="subtitle">Esta simulación estima la manutención según las leyes ecuatorianas.</p>
-        
+
         <form className="calculator-form" onSubmit={calculateSupport}>
           <div className="form-columns">
             <div className="form-column">
               <div className="form-row">
-                <label htmlFor="monthlyIncome">Sueldo Mensual ($):</label>
+                <label htmlFor="monthlyIncome">Sueldo Mensual del alimentante ($):</label>
                 <input
                   type="number"
                   id="monthlyIncome"
                   placeholder="Escribe aquí..."
-                  value={monthlyIncome}
+                  value={isUnemployed ? "470" : monthlyIncome}
                   onChange={(e) => setMonthlyIncome(e.target.value)}
                   required
+                  disabled={isUnemployed}
                 />
               </div>
               
               <div className="form-row">
-                <label htmlFor="childrenOver3">Número de hijos mayores de 3 años:</label>
-                <input
-                  type="number"
-                  id="childrenOver3"
-                  placeholder="Escribe aquí..."
-                  value={childrenOver3}
-                  onChange={(e) => setChildrenOver3(e.target.value)}
-                />
+                <div className="checkbox-container">
+                  <input
+                    type="checkbox"
+                    id="isUnemployed"
+                    checked={isUnemployed}
+                    onChange={(e) => {
+                      setIsUnemployed(e.target.checked);
+                      if (e.target.checked) {
+                        setMonthlyIncome('470');
+                        setInsuranceType('public');
+                      }
+                    }}
+                  />
+                  <label htmlFor="isUnemployed" className="checkbox-label">Si el alimentante no trabaja ni tiene ingresos marque aquí</label>
+                </div>
               </div>
-              
+
+              <div className="form-row">
+                <div className="checkbox-container">
+                  <input
+                    type="checkbox"
+                    id="hasChildrenOver3"
+                    checked={hasChildrenOver3}
+                    onChange={(e) => {
+                      setHasChildrenOver3(e.target.checked);
+                      if (!e.target.checked) {
+                        setChildrenOver3('');
+                      }
+                    }}
+                  />
+                  <label htmlFor="hasChildrenOver3" className="checkbox-label">Tiene hijos mayores de 3 años</label>
+                </div>
+
+                {hasChildrenOver3 && (
+                  <div className="indented-input">
+                    <label htmlFor="childrenOver3">¿Cuántos hijos mayores a 3 años tiene?</label>
+                    <input
+                      type="number"
+                      id="childrenOver3"
+                      placeholder="Escribe aquí..."
+                      value={childrenOver3}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        // Solo permite valores entre 1 y 9
+                        if (value === '' || (parseInt(value) >= 1 && parseInt(value) <= 9)) {
+                          setChildrenOver3(value);
+                        }
+                      }}
+                      min="1"
+                      max="9"
+                    />
+                  </div>
+                )}
+              </div>
+
               <div className="form-row">
                 <div className="checkbox-container">
                   <input
@@ -254,53 +332,104 @@ function App() {
                   />
                   <label htmlFor="hasChildrenUnder3" className="checkbox-label">Tiene hijos entre 0 y 2 años</label>
                 </div>
-                
+
                 {hasChildrenUnder3 && (
                   <div className="indented-input">
-                    <label htmlFor="childrenUnder3">Número de hijos entre 0 y 2 años:</label>
+                    <label htmlFor="childrenUnder3">¿Cuántos hijos menores a 3 años tiene?</label>
                     <input
                       type="number"
                       id="childrenUnder3"
                       placeholder="Escribe aquí..."
                       value={childrenUnder3}
-                      onChange={(e) => setChildrenUnder3(e.target.value)}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        // Solo permite valores entre 1 y 9
+                        if (value === '' || (parseInt(value) >= 1 && parseInt(value) <= 9)) {
+                          setChildrenUnder3(value);
+                        }
+                      }}
+                      min="1"
+                      max="9"
                     />
                   </div>
                 )}
               </div>
             </div>
-            
+
             <div className="form-column">
-              <div className="form-row disability-row">
-                <label htmlFor="disabilityPercentage">
-                  Si tiene hijos con discapacidad marque el porcentaje que corresponde al nivel de inhabilitación del menor de edad.
-                </label>
+              {/* Selector para el tipo de seguro movido al lado derecho */}
+              <div className="form-row">
+                <label htmlFor="insuranceType">Escoja si el/la alimentante es:</label>
                 <select
-                  id="disabilityPercentage"
-                  value={disabilityPercentage}
-                  onChange={(e) => setDisabilityPercentage(e.target.value)}
+                  id="insuranceType"
+                  value={insuranceType}
+                  onChange={(e) => setInsuranceType(e.target.value)}
+                  disabled={isUnemployed}
                 >
-                  <option value="">Seleccione una opción</option>
-                  <option value="30">30% - 49%</option>
-                  <option value="50">50% - 69%</option>
-                  <option value="70">70% - 84%</option>
-                  <option value="85">85% - 100%</option>
+                  <option value="private">Trabajador Privado</option>
+                  <option value="public">Funcionario Público</option>
+                  <option value="police">Policía</option>
+                  <option value="military">Militar</option>
                 </select>
+              </div>
+
+              <div className="form-row disability-row">
+                <div className="checkbox-container">
+                  <input
+                    type="checkbox"
+                    id="hasDisability"
+                    checked={hasDisability}
+                    onChange={(e) => {
+                      setHasDisability(e.target.checked);
+                      if (!e.target.checked) {
+                        setDisabilityPercentage('');
+                      }
+                    }}
+                  />
+                  <label htmlFor="hasDisability" className="checkbox-label">
+                    Tiene hijos con discapacidad
+                  </label>
+                </div>
+
+                {hasDisability && (
+                  <div className="indented-input">
+                    <label htmlFor="disabilityPercentage">
+                      Marque el porcentaje que corresponde al nivel de inhabilitación del menor de edad.
+                    </label>
+                    <select
+                      id="disabilityPercentage"
+                      value={disabilityPercentage}
+                      onChange={(e) => setDisabilityPercentage(e.target.value)}
+                    >
+                      <option value="">Indique el porcentaje</option>
+                      <option value="30">30% - 49%</option>
+                      <option value="50">50% - 69%</option>
+                      <option value="70">70% - 84%</option>
+                      <option value="85">85% - 100%</option>
+                    </select>
+                  </div>
+                )}
               </div>
             </div>
           </div>
-          
+
           <button type="submit" className="calculate-button">Calcular</button>
+          <br></br>
+          <p className='aviso'>*Descargo de responsabilidad: Esta calculadora es una herramienta gratuita y referencial, diseñada únicamente con fines informativos. Los valores generados no constituyen asesoría legal, ni implican garantía alguna sobre montos definitivos que puedan fijarse como pensión alimenticia en un caso concreto.</p>
         </form>
-        
+
         {/* Results Dialog */}
         {showDialog && result && (
           <div className="dialog-overlay">
             <div className="dialog-container">
               <div className="dialog-content">
+                {/* Marca de agua (logo) */}
+                <div className="watermark"></div>
+                
                 <h2>Resultado del Cálculo</h2>
                 <div className="result-info">
-                  <p><strong>Ingresos del alimentante:</strong> ${result.income}</p>
+                  <p><strong>Ingresos brutos del alimentante:</strong> ${result.grossIncome}</p>
+                  <p><strong>Ingresos netos (después del descuento):</strong> ${result.netIncome}</p>
                   <p><strong>Nivel aplicado:</strong> {result.level} ({result.incomeSBU} SBU)</p>
                   <p><strong>Porcentaje aplicado:</strong> {result.percentageOfIncome}%</p>
                   {parseFloat(result.disabilityAmount) > 0 && (
@@ -309,29 +438,29 @@ function App() {
                   <p><strong>Pensión alimenticia total:</strong> ${result.totalAmount}</p>
                   <p><strong>Monto por hijo:</strong> ${result.perChildAmount}</p>
                   <p><strong>Número de hijos:</strong> {result.totalChildren}</p>
-                  {result.hasChildrenUnder3 && result.hasChildrenOver3 && (
-                    <p><strong>Art. 14 aplicado:</strong> {result.appliedArt14} (Se aplicó el porcentaje del hijo de mayor edad)</p>
-                  )}
                 </div>
                 <p className="result-note">
                   Cálculo basado en la tabla de pensiones alimenticias mínimas 2025 con un SBU de ${result.SBU}.
                 </p>
-                <button 
-                  className="close-dialog-button"
-                  onClick={() => setShowDialog(false)}
-                >
-                  Cerrar
-                </button>
+                <div className='action-buttons'>
+                  <WhatsAppButton />
+                  <button
+                    className="close-dialog-button"
+                    onClick={() => setShowDialog(false)}
+                  >
+                    Cerrar
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         )}
-        
+
         <p className="result-note">
           {!result && "El resultado de la calculadora se divide entre el número de hijos en el proceso de alimentos."}
         </p>
       </main>
-      
+
       <footer>
         <p>© {new Date().getFullYear()} Charry Sáenz Jácome & Galarza - Estudio Jurídico</p>
       </footer>
