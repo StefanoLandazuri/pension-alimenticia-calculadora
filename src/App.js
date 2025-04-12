@@ -2,6 +2,12 @@ import React, { useState } from 'react';
 import './App.css';
 import logo from './assets/logo.png';
 import WhatsAppButton from './components/WhatsAppButton';
+import CornerTip from './components/CornerTip';
+
+// Importa las imágenes para los consejos
+import consejo1Img from './assets/ninos.jpg';
+import consejo2Img from './assets/alimento.jpg';
+import consejo3Img from './assets/asesoria.jpg';
 
 function App() {
   // State for form inputs
@@ -13,7 +19,7 @@ function App() {
   const [hasChildrenUnder3, setHasChildrenUnder3] = useState(false);
   const [hasDisability, setHasDisability] = useState(false);
   const [disabilityPercentage, setDisabilityPercentage] = useState('');
-  const [insuranceType, setInsuranceType] = useState('public'); // Predeterminado a funcionario público
+  const [insuranceType, setInsuranceType] = useState('public');
   const [result, setResult] = useState(null);
   const [showDialog, setShowDialog] = useState(false);
 
@@ -231,8 +237,6 @@ function App() {
     setShowDialog(true);
   };
 
-
-
   return (
     <div className="app">
       <header>
@@ -242,6 +246,28 @@ function App() {
       </header>
 
       <main className="calculator-container">
+        {/* Consejos en las esquinas - REEMPLAZA LOS TEXTOS Y LAS IMÁGENES SEGÚN NECESITES */}
+        <CornerTip
+          position="top-left"
+          title="💡"
+          content="Recuerda que la pensión de alimentos se debe desde la presentación de la demanda."
+          imageSrc={consejo1Img}
+        />
+
+        <CornerTip
+          position="top-right"
+          title="💡"
+          content="El derecho de alimentos puede ser solicitado incluso si el hijo y el obligado conviven bajo el mismo techo."
+          imageSrc={consejo2Img}
+        />
+
+        <CornerTip
+          position="bottom-left"
+          title="💡"
+          content="El derecho de alimentos lo puedo solicitar el padre o la madre a cuyo cuidado se encuentre el hijo."
+          imageSrc={consejo3Img}
+        />
+
         <h1>Calculadora de Pensiones Alimenticias</h1>
         <p className="subtitle">Esta simulación estima la manutención según las leyes ecuatorianas.</p>
 
@@ -260,7 +286,7 @@ function App() {
                   disabled={isUnemployed}
                 />
               </div>
-              
+
               <div className="form-row">
                 <div className="checkbox-container">
                   <input
@@ -410,6 +436,8 @@ function App() {
                   </div>
                 )}
               </div>
+
+
             </div>
           </div>
 
@@ -425,7 +453,7 @@ function App() {
               <div className="dialog-content">
                 {/* Marca de agua (logo) */}
                 <div className="watermark"></div>
-                
+
                 <h2>Resultado del Cálculo</h2>
                 <div className="result-info">
                   <p><strong>Ingresos brutos del alimentante:</strong> ${result.grossIncome}</p>
