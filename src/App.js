@@ -275,7 +275,7 @@ function App() {
                       }
                     }}
                   />
-                  <label htmlFor="isUnemployed" className="checkbox-label">Si el alimentante no trabaja ni tiene ingresos marque aquí</label>
+                  <label htmlFor="isUnemployed" className="checkbox-label">*Si el alimentante no trabaja ni tiene ingresos marque aquí</label>
                 </div>
               </div>
 
@@ -330,7 +330,7 @@ function App() {
                       }
                     }}
                   />
-                  <label htmlFor="hasChildrenUnder3" className="checkbox-label">Tiene hijos entre 0 y 2 años</label>
+                  <label htmlFor="hasChildrenUnder3" className="checkbox-label">Tiene hijos menores a 3 años </label>
                 </div>
 
                 {hasChildrenUnder3 && (
@@ -387,15 +387,12 @@ function App() {
                     }}
                   />
                   <label htmlFor="hasDisability" className="checkbox-label">
-                    Tiene hijos con discapacidad
+                    ¿Alguno de sus hijos tiene discapacidad?
                   </label>
                 </div>
 
                 {hasDisability && (
                   <div className="indented-input">
-                    <label htmlFor="disabilityPercentage">
-                      Marque el porcentaje que corresponde al nivel de inhabilitación del menor de edad.
-                    </label>
                     <select
                       id="disabilityPercentage"
                       value={disabilityPercentage}
