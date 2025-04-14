@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/pension-alimenticia-calculadora/static/css/main.9b84cb7a.css",
-    "main.js": "/pension-alimenticia-calculadora/static/js/main.0035d33a.js",
+    "main.js": "/pension-alimenticia-calculadora/static/js/main.e89d744f.js",
     "static/js/488.2e78061a.chunk.js": "/pension-alimenticia-calculadora/static/js/488.2e78061a.chunk.js",
     "static/media/otavalenia.png": "/pension-alimenticia-calculadora/static/media/otavalenia.fdb236f8013b8b942227.png",
     "static/media/logo.png": "/pension-alimenticia-calculadora/static/media/logo.ced2320b6e231b263c91.png",
@@ -9,11 +9,11 @@
     "static/media/CentraleSans-Medium.woff2": "/pension-alimenticia-calculadora/static/media/CentraleSans-Medium.83e5fc6d3b8f8cdd0091.woff2",
     "index.html": "/pension-alimenticia-calculadora/index.html",
     "main.9b84cb7a.css.map": "/pension-alimenticia-calculadora/static/css/main.9b84cb7a.css.map",
-    "main.0035d33a.js.map": "/pension-alimenticia-calculadora/static/js/main.0035d33a.js.map",
+    "main.e89d744f.js.map": "/pension-alimenticia-calculadora/static/js/main.e89d744f.js.map",
     "488.2e78061a.chunk.js.map": "/pension-alimenticia-calculadora/static/js/488.2e78061a.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.9b84cb7a.css",
-    "static/js/main.0035d33a.js"
+    "static/js/main.e89d744f.js"
   ]
 }
