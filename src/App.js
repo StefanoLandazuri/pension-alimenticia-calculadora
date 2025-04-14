@@ -200,7 +200,7 @@ function App() {
     const disabilityAmount = (disabilitySupport * SBU / 100).toFixed(2);
 
     // Calcular el monto total
-    const totalAmount = (parseFloat(supportAmount) + parseFloat(disabilityAmount)).toFixed(2);
+    const totalAmount = (parseFloat(supportAmount)).toFixed(2);
 
     // Calcular monto por hijo
     const perChildAmount = (totalAmount / totalChildren).toFixed(2);
