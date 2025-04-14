@@ -432,9 +432,6 @@ function App() {
                   <p><strong>Monto por hijo:</strong> ${result.perChildAmount}</p>
                   <p><strong>Número de hijos:</strong> {result.totalChildren}</p>
                 </div>
-                <p className="result-note">
-                  Cálculo basado en la tabla de pensiones alimenticias mínimas 2025 con un SBU de ${result.SBU}.
-                </p>
                 <div className='action-buttons'>
                   <WhatsAppButton />
                   <button
@@ -443,6 +440,9 @@ function App() {
                   >
                     Cerrar
                   </button>
+                  <p className="result-note aviso">
+                    Cálculo basado en la tabla de pensiones alimenticias mínimas 2025 con un SBU de ${result.SBU}.
+                  </p>
                 </div>
               </div>
             </div>
