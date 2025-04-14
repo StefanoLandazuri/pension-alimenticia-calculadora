@@ -353,3 +353,18 @@ footer {
   z-index: 0;
   pointer-events: none;
 }
+.img-container{
+  display: flex;
+  justify-content: center;
+}
+
+.img-container img{
+  width: 175px;
+  height: 225px;
+}
+
+@media (max-width: 768px) {
+  .img-container {
+    display: none; /* Oculta completamente el contenedor en móviles */
+  }
+}

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 import logo from './assets/logo.png';
 import WhatsAppButton from './components/WhatsAppButton';
+import imgForm from './assets/otavalenia.png';
 
 function App() {
   // State for form inputs
@@ -406,6 +407,10 @@ function App() {
                     </select>
                   </div>
                 )}
+                <div className='img-container'>
+                <img src={imgForm} alt='imagen referencial'>
+                </img>
+              </div>
               </div>
             </div>
           </div>
@@ -427,7 +432,7 @@ function App() {
                 <div className="result-info">
                   <p><strong>Ingresos brutos del alimentante:</strong> ${result.grossIncome}</p>
                   <p><strong>Ingresos netos (después del descuento):</strong> ${result.netIncome}</p>
-                  <p><strong>Nivel aplicado:</strong> {result.level} ({result.incomeSBU} SBU)</p>
+                  <p><strong>Nivel aplicado:</strong> {result.level} ({parseFloat(result.incomeSBU<1?"1.00":result.incomeSBU)} SBU)</p>
                   <p><strong>Porcentaje aplicado:</strong> {result.percentageOfIncome}%</p>
                   {parseFloat(result.disabilityAmount) > 0 && (
                     <p><strong>Adicional por discapacidad:</strong> ${result.disabilityAmount}</p>
