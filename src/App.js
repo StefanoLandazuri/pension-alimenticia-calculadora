@@ -13,7 +13,7 @@ function App() {
   const [hasChildrenUnder3, setHasChildrenUnder3] = useState(false);
   const [hasDisability, setHasDisability] = useState(false);
   const [disabilityPercentage, setDisabilityPercentage] = useState('');
-  const [insuranceType, setInsuranceType] = useState('public'); // Predeterminado a funcionario público
+  const [insuranceType, setInsuranceType] = useState('private'); // Predeterminado a funcionario público
   const [result, setResult] = useState(null);
   const [showDialog, setShowDialog] = useState(false);
 
@@ -47,8 +47,11 @@ function App() {
       case 'military':
         insurancePercentage = 13.50;
         break;
+      case 'voluntary':
+        insurancePercentage = 17.60;
+        break;
       default:
-        insurancePercentage = 9.45; // Valor por defecto
+        insurancePercentage = 11.45; // Valor por defecto
     }
 
     // Calcular el ingreso neto después del descuento del seguro
@@ -266,6 +269,8 @@ function App() {
                       if (e.target.checked) {
                         setMonthlyIncome('470');
                         setInsuranceType('public');
+                      }else{
+                        setInsuranceType('private');
                       }
                     }}
                   />
@@ -363,6 +368,7 @@ function App() {
                   <option value="public">Funcionario Público</option>
                   <option value="police">Policía</option>
                   <option value="military">Militar</option>
+                  <option value="voluntary">Afiliado Voluntario</option>
                 </select>
               </div>
 
