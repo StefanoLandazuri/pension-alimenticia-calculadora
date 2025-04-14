@@ -5,7 +5,6 @@ import WhatsAppButton from './components/WhatsAppButton';
 import imgForm from './assets/otavalenia.png';
 
 function App() {
-  // State for form inputs
   const [monthlyIncome, setMonthlyIncome] = useState('');
   const [isUnemployed, setIsUnemployed] = useState(false);
   const [childrenOver3, setChildrenOver3] = useState('');
@@ -18,7 +17,6 @@ function App() {
   const [result, setResult] = useState(null);
   const [showDialog, setShowDialog] = useState(false);
 
-  // Handle calculation
   const calculateSupport = (e) => {
     e.preventDefault();
 
@@ -75,11 +73,8 @@ function App() {
       level = 6;
     }
 
-    // Calcular el porcentaje según el nivel, edad y número de hijos
     let percentageOfIncome = 0;
 
-    // Considerar Art. 14: En caso de tener hijos de diferentes edades, 
-    // se aplicará el porcentaje correspondiente al derechohabiente de mayor edad.
     const hasOver3 = over3Count > 0;
 
     // Porcentajes para 1 hijo
@@ -108,7 +103,6 @@ function App() {
     }
     // Porcentajes para 2 hijos
     else if (totalChildren === 2) {
-      // Según Art. 14, si hay hijos mayores de 3 años, aplicamos ese porcentaje
       if (hasOver3) { // Al menos un hijo de 3 años o más
         switch (level) {
           case 1: percentageOfIncome = 43.13; break;
@@ -135,7 +129,6 @@ function App() {
     }
     // Porcentajes para 3 o más hijos
     else if (totalChildren >= 3) {
-      // Según Art. 14, si hay hijos mayores de 3 años, aplicamos ese porcentaje
       if (hasOver3) { // Al menos un hijo de 3 años o más
         switch (level) {
           case 1: percentageOfIncome = 54.23; break;
@@ -358,7 +351,6 @@ function App() {
             </div>
 
             <div className="form-column">
-              {/* Selector para el tipo de seguro movido al lado derecho */}
               <div className="form-row">
                 <label htmlFor="insuranceType">Escoja si el/la alimentante es:</label>
                 <select
@@ -420,7 +412,6 @@ function App() {
           <p className='aviso'>*Descargo de responsabilidad: Esta calculadora es una herramienta gratuita y referencial, diseñada únicamente con fines informativos. Los valores generados no constituyen asesoría legal, ni implican garantía alguna sobre montos definitivos que puedan fijarse como pensión alimenticia en un caso concreto.</p>
         </form>
 
-        {/* Results Dialog */}
         {showDialog && result && (
           <div className="dialog-overlay">
             <div className="dialog-container">

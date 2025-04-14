@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import './WhatsAppButton.css';
 
 const WhatsAppButton = () => {
-    // Número de WhatsApp fijo del estudio jurídico (con código de país)
     const phoneNumber = "593999874040"; // Reemplaza con tu número real
 
     // Código promocional
