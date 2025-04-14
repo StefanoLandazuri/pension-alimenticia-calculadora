@@ -5,6 +5,9 @@ import WhatsAppButton from './components/WhatsAppButton';
 import imgForm from './assets/otavalenia.png';
 
 function App() {
+
+  const SBU = 470; // Salario Básico Unificado de Ecuador 2025
+
   const [monthlyIncome, setMonthlyIncome] = useState('');
   const [isUnemployed, setIsUnemployed] = useState(false);
   const [childrenOver3, setChildrenOver3] = useState('');
@@ -21,7 +24,6 @@ function App() {
     e.preventDefault();
 
     // Variables
-    const SBU = 470; // Salario Básico Unificado de Ecuador 2025
     const grossIncome = isUnemployed ? SBU : (parseFloat(monthlyIncome) || 0);
     const over3Count = hasChildrenOver3 ? (parseInt(childrenOver3) || 0) : 0;
     const under3Count = hasChildrenUnder3 ? (parseInt(childrenUnder3) || 0) : 0;
@@ -250,11 +252,12 @@ function App() {
                 <input
                   type="number"
                   id="monthlyIncome"
-                  placeholder="Escribe aquí..."
+                  placeholder="470"
                   value={isUnemployed ? "470" : monthlyIncome}
                   onChange={(e) => setMonthlyIncome(e.target.value)}
                   required
                   disabled={isUnemployed}
+                  min={SBU}
                 />
               </div>
 
