@@ -261,7 +261,7 @@ function App() {
                   disabled={isUnemployed}
                 />
               </div>
-              
+
               <div className="form-row">
                 <div className="checkbox-container">
                   <input
@@ -408,9 +408,9 @@ function App() {
                   </div>
                 )}
                 <div className='img-container'>
-                <img src={imgForm} alt='imagen referencial'>
-                </img>
-              </div>
+                  <img src={imgForm} alt='imagen referencial'>
+                  </img>
+                </div>
               </div>
             </div>
           </div>
@@ -427,12 +427,12 @@ function App() {
               <div className="dialog-content">
                 {/* Marca de agua (logo) */}
                 <div className="watermark"></div>
-                
+
                 <h2>Resultado del Cálculo</h2>
                 <div className="result-info">
                   <p><strong>Ingresos brutos del alimentante:</strong> ${result.grossIncome}</p>
-                  <p><strong>Ingresos netos (después del descuento):</strong> ${result.netIncome}</p>
-                  <p><strong>Nivel aplicado:</strong> {result.level} ({parseFloat(result.incomeSBU<1?"1.00":result.incomeSBU)} SBU)</p>
+                  <p><strong>Ingresos netos (después del descuento de afiliación):</strong> ${result.netIncome}</p>
+                  <p><strong>Nivel aplicado:</strong> {result.level} ({parseFloat(result.incomeSBU < 1 ? "1.00" : result.incomeSBU)} SBU)</p>
                   <p><strong>Porcentaje aplicado:</strong> {result.percentageOfIncome}%</p>
                   {parseFloat(result.disabilityAmount) > 0 && (
                     <p><strong>Adicional por discapacidad:</strong> ${result.disabilityAmount}</p>
